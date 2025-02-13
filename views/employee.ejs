@@ -1,15 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Error</title>
-  <link rel='stylesheet' href='/stylesheets/error.css' />
- 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Team</title>
+    <link rel="stylesheet" href="/stylesheets/employee.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Employee</h1>
-  </div>
+    <div class="create-team-container">
+        <h2>Create Team</h2>
+        <form action="/employee" method="POST">
+            <!-- Team Name -->
+            <div class="form-group">
+                <label for="team-name">Team Name:</label>
+                <input type="text" id="team-name" name="teamName" required>
+            </div>
+
+           <!-- Description -->
+           <div class="form-group">
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4" required></textarea>
+        </div>
+
+            <!-- Additional Employee 1 Username -->
+            <div class="form-group">
+                <label for="employee1-username">Employee 1 Username:</label>
+                <input type="text" id="employee1-username" name="employee1Username" required>
+            </div>
+
+            <!-- Additional Employee 2 Username -->
+            <div class="form-group">
+                <label for="employee2-username">Employee 2 Username:</label>
+                <input type="text" id="employee2-username" name="employee2Username" required>
+            </div>
+
+            <!-- Request Button -->
+            <button type="submit">Request Team Creation</button>
+        </form>
+    </div>
 </body>
 </html>
