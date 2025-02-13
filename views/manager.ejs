@@ -1,15 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Error</title>
-  <link rel='stylesheet' href='/stylesheets/error.css' />
- 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Management</title>
+    <link rel="stylesheet" href="/stylesheets/manager.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Manager</h1>>
-  </div>
+    <div class="team-management-container">
+        <h2>Team Management</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Team Name</th>
+                    <th>Leader</th>
+                    <th>Employee 1</th>
+                    <th>Employee 2</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+              <% 
+                  // Dummy data defined directly in the EJS template
+                  const teams = [
+                      {
+                          teamName: "Dev Team",
+                          leader: "john_doe",
+                          employee1: "jane_doe",
+                          employee2: "alice_smith"
+                      },
+                      {
+                          teamName: "Design Team",
+                          leader: "bob_jones",
+                          employee1: "charlie_brown",
+                          employee2: "diana_ross"
+                      },
+                      {
+                          teamName: "Marketing Team",
+                          leader: "emma_watson",
+                          employee1: "frank_sinatra",
+                          employee2: "grace_hopper"
+                      }
+                  ];
+
+                  // Loop through the dummy data
+                  teams.forEach((team, index) => { 
+              %>
+                  <tr>
+                      <td><%= team.teamName %></td>
+                      <td><%= team.leader %></td>
+                      <td><%= team.employee1 %></td>
+                      <td><%= team.employee2 %></td>
+                      <td>
+                          <button class="approve-btn" onclick="handleAction('<%= team.teamName %>', 'approve')">Approve</button>
+                          <button class="reject-btn" onclick="handleAction('<%= team.teamName %>', 'reject')">Reject</button>
+                      </td>
+                  </tr>
+              <% }) %>
+          </tbody>
+        </table>
+    </div>
+
+    <script>
+        function handleAction(teamName, action) {
+            alert(`Team: ${teamName} - Action: ${action}`);
+            // You can add AJAX/fetch logic here to send the action to the server
+        }
+    </script>
 </body>
 </html>
