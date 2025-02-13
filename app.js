@@ -11,7 +11,7 @@ var managerRouter = require('./routes/manager');
 var employeeRouter = require('./routes/employee');
 var indexRouter = require('./routes/index');
 var cors = require('cors');
-var db = require('./configs/dbconnection');
+
 
 var app = express();
 
