@@ -3,57 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Team Management</title>
+    <title>Meeting Requests</title>
     <link rel="stylesheet" href="/stylesheets/manager.css">
 </head>
 <body>
-    <div class="team-management-container">
-        <h2>Team Management</h2>
+    <div class="meeting-management-container">
+        <h2>Meeting Requests</h2>
         <table>
             <thead>
                 <tr>
-                    <th>Team Name</th>
-                    <th>Leader</th>
-                    <th>Employee 1</th>
-                    <th>Employee 2</th>
+                    <th>Employee Name</th>
+                    <th>Subject</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Description</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
               <% 
-                  // Dummy data defined directly in the EJS template
-                  const teams = [
+                  // Dummy meeting request data
+                  const meetings = [
                       {
-                          teamName: "Dev Team",
-                          leader: "john_doe",
-                          employee1: "jane_doe",
-                          employee2: "alice_smith"
+                          employeeName: "John Doe",
+                          subject: "Project Discussion",
+                          date: "2025-02-20",
+                          time: "10:00 AM",
+                          description: "Discuss the upcoming project milestones and deadlines."
                       },
                       {
-                          teamName: "Design Team",
-                          leader: "bob_jones",
-                          employee1: "charlie_brown",
-                          employee2: "diana_ross"
+                          employeeName: "Alice Smith",
+                          subject: "Design Review",
+                          date: "2025-02-21",
+                          time: "02:00 PM",
+                          description: "Review the new UI/UX design updates for the website."
                       },
                       {
-                          teamName: "Marketing Team",
-                          leader: "emma_watson",
-                          employee1: "frank_sinatra",
-                          employee2: "grace_hopper"
+                          employeeName: "Michael Brown",
+                          subject: "Marketing Strategy",
+                          date: "2025-02-22",
+                          time: "11:30 AM",
+                          description: "Plan and finalize the next quarter marketing strategies."
                       }
                   ];
 
                   // Loop through the dummy data
-                  teams.forEach((team, index) => { 
+                  meetings.forEach((meeting, index) => { 
               %>
                   <tr>
-                      <td><%= team.teamName %></td>
-                      <td><%= team.leader %></td>
-                      <td><%= team.employee1 %></td>
-                      <td><%= team.employee2 %></td>
+                      <td><%= meeting.employeeName %></td>
+                      <td><%= meeting.subject %></td>
+                      <td><%= meeting.date %></td>
+                      <td><%= meeting.time %></td>
+                      <td><%= meeting.description %></td>
                       <td>
-                          <button class="approve-btn" onclick="handleAction('<%= team.teamName %>', 'approve')">Approve</button>
-                          <button class="reject-btn" onclick="handleAction('<%= team.teamName %>', 'reject')">Reject</button>
+                          <button class="approve-btn" onclick="handleAction('<%= meeting.employeeName %>', 'approve')">Approve</button>
+                          <button class="reject-btn" onclick="handleAction('<%= meeting.employeeName %>', 'reject')">Reject</button>
                       </td>
                   </tr>
               <% }) %>
@@ -62,8 +67,8 @@
     </div>
 
     <script>
-        function handleAction(teamName, action) {
-            alert(`Team: ${teamName} - Action: ${action}`);
+        function handleAction(employeeName, action) {
+            alert(`Meeting request by: ${employeeName} - Action: ${action}`);
             // You can add AJAX/fetch logic here to send the action to the server
         }
     </script>
