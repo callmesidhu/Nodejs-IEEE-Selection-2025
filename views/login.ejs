@@ -1,26 +1,30 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <link rel="stylesheet" href="/stylesheets/login.css">
-</head>
-<body>
-    <div class="login-container">
-        <h2>Login</h2>
-        <form action="/login" method="POST">
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Login</button>
-            <p>Don't have an account? <a href="/signup">Signup here</a></p>
-        </form>
-    </div>
-</body>
-</html>
+router.post("/", async function (req, res, next) {
+    const { fullname, password, email } = req.body;
+  
+    console.log("📥 Received Data:", { fullname, email });
+  
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      console.log("🔐 Hashed Password:", hashedPassword);
+  
+      let sql = "INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)";
+      
+      db.query(sql, [fullname, email, hashedPassword], (err, result) => {
+        if (err) {
+          console.error("❌ Database Error:", err);
+          return res.status(500).send("Database error!");
+        }
+  
+        console.log("✅ User added successfully:", result);
+        console.log("➡️ Redirecting to /login");
+  
+        // Ensure request ends properly
+        return res.redirect("/login");
+      });
+  
+    } catch (error) {
+      console.error("❌ Unexpected Error:", error);
+      return res.status(500).send("Something went wrong!");
+    }
+  });
+  
