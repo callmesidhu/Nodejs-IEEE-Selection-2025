@@ -9,73 +9,54 @@
 <body>
     <div class="admin-dashboard-container">
         <h2>Admin Dashboard</h2>
+
         <% 
-            // Dummy data defined directly in the EJS template
+            // Dummy data with managers, teams, and employees
             const managers = [
                 {
                     managerName: "John Doe",
-                    teams: [
-                        {
-                            teamName: "Dev Team",
-                            leader: "john_doe",
-                            employee1: "jane_doe",
-                            employee2: "alice_smith"
-                        },
-                        {
-                            teamName: "QA Team",
-                            leader: "john_doe",
-                            employee1: "bob_jones",
-                            employee2: "charlie_brown"
-                        }
+                    teamName: "Development Team",
+                    employees: [
+                        { name: "Alice Smith", date: "2025-02-16", time: "10:00 AM", subject: "Code Review" },
+                        { name: "Bob Johnson", date: "2025-02-17", time: "11:30 AM", subject: "Feature Discussion" }
                     ]
                 },
                 {
                     managerName: "Emma Watson",
-                    teams: [
-                        {
-                            teamName: "Design Team",
-                            leader: "emma_watson",
-                            employee1: "frank_sinatra",
-                            employee2: "grace_hopper"
-                        },
-                        {
-                            teamName: "Marketing Team",
-                            leader: "emma_watson",
-                            employee1: "diana_ross",
-                            employee2: "alice_smith"
-                        }
+                    teamName: "Marketing Team",
+                    employees: [
+                        { name: "Charlie Brown", date: "2025-02-18", time: "9:45 AM", subject: "Campaign Strategy" },
+                        { name: "Diana Ross", date: "2025-02-19", time: "3:00 PM", subject: "Branding Ideas" }
                     ]
                 }
             ];
 
-            // Loop through each manager
+            // Loop through each manager and their teams
             managers.forEach((manager) => {
         %>
             <div class="manager-section">
                 <h3>Manager: <%= manager.managerName %></h3>
+                <h4>Team: <%= manager.teamName %></h4>
                 <table>
                     <thead>
                         <tr>
-                            <th>Team Name</th>
-                            <th>Leader</th>
-                            <th>Employee 1</th>
-                            <th>Employee 2</th>
+                            <th>Employee Name</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Subject</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% 
-                            // Loop through each team under the manager
-                            manager.teams.forEach((team) => {
-                        %>
+                        <% manager.employees.forEach((employee) => { %>
                             <tr>
-                                <td><%= team.teamName %></td>
-                                <td><%= team.leader %></td>
-                                <td><%= team.employee1 %></td>
-                                <td><%= team.employee2 %></td>
+                                <td><%= employee.name %></td>
+                                <td><%= employee.date %></td>
+                                <td><%= employee.time %></td>
+                                <td><%= employee.subject %></td>
                                 <td>
-                                    <button class="approve-btn" onclick="handleAction('<%= team.teamName %>', 'approve')">Approve</button>
-                                    <button class="reject-btn" onclick="handleAction('<%= team.teamName %>', 'reject')">Reject</button>
+                                    <button class="approve-btn" onclick="handleAction('<%= employee.name %>', 'approve')">Approve</button>
+                                    <button class="reject-btn" onclick="handleAction('<%= employee.name %>', 'reject')">Reject</button>
                                 </td>
                             </tr>
                         <% }) %>
@@ -86,8 +67,8 @@
     </div>
 
     <script>
-        function handleAction(teamName, action) {
-            alert(`Team: ${teamName} - Action: ${action}`);
+        function handleAction(employeeName, action) {
+            alert(`Employee: ${employeeName} - Action: ${action}`);
             // You can add AJAX/fetch logic here to send the action to the server
         }
     </script>
