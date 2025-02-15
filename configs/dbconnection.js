@@ -14,13 +14,14 @@ const db = mysql.createPool({
     queueLimit: 0
 });
 
-// Connect to MySQL
-db.connect(err => {
+// Test the database connection
+db.getConnection((err, connection) => {
     if (err) {
-        console.error('MySQL Connection Error:', err);
-        return;
+        console.error('❌ MySQL Connection Error:', err);
+    } else {
+        console.log('✅ Connected to MySQL!');
+        connection.release(); // Release the connection back to the pool
     }
-    console.log('Connected to MySQL!');
 });
 
-module.exports = db;
+module.exports = db.promise(); // Export as promise-based for async/await

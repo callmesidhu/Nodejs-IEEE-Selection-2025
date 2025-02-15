@@ -10,6 +10,8 @@ var adminRouter = require('./routes/admin');
 var managerRouter = require('./routes/manager');
 var employeeRouter = require('./routes/employee');
 var indexRouter = require('./routes/index');
+var db = require('./configs/dbconnection');
+
 var cors = require('cors');
 
 
