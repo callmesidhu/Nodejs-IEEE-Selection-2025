@@ -3,39 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Team</title>
+    <title>Request Meeting</title>
     <link rel="stylesheet" href="/stylesheets/employee.css">
 </head>
 <body>
-    <div class="create-team-container">
-        <h2>Create Team</h2>
+    <div class="meeting-container">
+        <h2>Request Meeting</h2>
         <form action="/employee" method="POST">
-            <!-- Team Name -->
+            <!-- Meeting Title -->
             <div class="form-group">
-                <label for="team-name">Team Name:</label>
-                <input type="text" id="team-name" name="teamName" required>
+                <label for="meeting-title">Meeting Title:</label>
+                <input type="text" id="meeting-title" name="meetingTitle" required>
             </div>
 
-           <!-- Description -->
-           <div class="form-group">
-            <label for="description">Description:</label>
-            <textarea id="description" name="description" rows="4" required></textarea>
-        </div>
-
-            <!-- Additional Employee 1 Username -->
+            <!-- Date -->
             <div class="form-group">
-                <label for="employee1-username">Employee 1 Username:</label>
-                <input type="text" id="employee1-username" name="employee1Username" required>
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
             </div>
 
-            <!-- Additional Employee 2 Username -->
+            <!-- Time -->
             <div class="form-group">
-                <label for="employee2-username">Employee 2 Username:</label>
-                <input type="text" id="employee2-username" name="employee2Username" required>
+                <label for="time">Time:</label>
+                <input type="time" id="time" name="time" required>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
             </div>
 
             <!-- Request Button -->
-            <button type="submit">Request Team Creation</button>
+            <button type="submit">Request Meeting</button>
         </form>
     </div>
 </body>
