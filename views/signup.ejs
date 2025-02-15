@@ -5,14 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <link rel="stylesheet" href="/stylesheets/signup.css">
+    <script>
+        function validatePassword() {
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+            const errorText = document.getElementById("password-error");
+
+            if (password !== confirmPassword) {
+                errorText.innerText = "Passwords do not match!";
+                return false;
+            } else {
+                errorText.innerText = ""; // Clear error if passwords match
+                return true;
+            }
+        }
+
+        function handleSubmit(event) {
+            if (!validatePassword()) {
+                event.preventDefault(); // Prevent form submission if passwords don't match
+            }
+        }
+    </script>
+    <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
     <div class="signup-container">
         <h2>Sign Up</h2>
-        <form action="/signup" method="POST">
+        <form action="/signup" method="POST" onsubmit="handleSubmit(event)">
             <div class="form-group">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+                <label for="fullname">Full name:</label>
+                <input type="text" id="fullname" name="fullname" required>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
@@ -20,11 +48,12 @@
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+                <input type="password" id="password" name="password" required oninput="validatePassword()">
             </div>
             <div class="form-group">
+                <span id="password-error" class="error-message"></span>
                 <label for="confirm-password">Confirm Password:</label>
-                <input type="password" id="confirm-password" name="confirmPassword" required>
+                <input type="password" id="confirm-password" name="confirmPassword" required oninput="validatePassword()">
             </div>
             <button type="submit">Sign Up</button>
         </form>
