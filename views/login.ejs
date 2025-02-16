@@ -16,7 +16,14 @@
 <body>
     <div class="login-container">
         <h2>Login</h2>
-        <form action="/login/submit" method="POST">
+        <!-- Show alert message if there is an error -->
+        <% if (message) { %>
+            <script>
+                alert("<%= message %>"); // Display error message in an alert
+            </script>
+        <% } %>
+
+        <form action="/login" method="POST">
             <div class="form-group">
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>

@@ -9,8 +9,9 @@ router.get("/", (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-
     const { fullname, password, email } = req.body;
+
+
     if (!fullname || !password || !email) {
       return res.render("signup", { message: "All fields are required!" });
     }
