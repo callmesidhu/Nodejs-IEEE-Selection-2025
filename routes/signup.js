@@ -1,41 +1,28 @@
-var express = require("express");
-var router = express.Router();
-var db = require("../configs/dbconnection");
-var bcrypt = require("bcrypt");
+const express = require("express");
+const router = express.Router();
+const db = require("../configs/dbconnection"); // Ensure this is the MySQL2 promise pool
+const bcrypt = require("bcrypt");
 
-router.get("/", function (req, res, next) {
-  res.render("signup");
+router.get("/", (req, res) => {
+  res.render("signup", { message: null });
 });
 
-router.post("/", async function (req, res, next) {
-  const { fullname, password, email } = req.body;
-
-  console.log("📥 Received Data:", { fullname, email });
-
+router.post("/submit", async (req, res) => {
   try {
-    // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("🔐 Hashed Password:", hashedPassword);
+    const { fullname, password, email } = req.body;
+    const saltRounds = 10;
 
-    // Insert into MySQL
-    let sql = "INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)";
-    db.query(sql, [fullname, email, hashedPassword], (err, result) => {
-      if (err) {
-        console.error("❌ Database Error:", err);
-        return res.status(500).send("Database error!");
-      }
+    // Hash the password asynchronously
+    const hashPassword = await bcrypt.hash(password, saltRounds);
+    console.log(req.body);
+    // Use parameterized query (prevents SQL injection)
+    const sql = "INSERT INTO users (fullname, password, email) VALUES (?, ?, ?)";
+    await db.execute(sql, [fullname, hashPassword, email]);
 
-      console.log("✅ User added successfully:", result);
-      
-      // Debugging redirection
-      console.log("➡️ Redirecting to /login");
-
-      return res.redirect("/login");
-    });
-
-  } catch (error) {
-    console.error("❌ Unexpected Error:", error);
-    return res.status(500).send("Something went wrong!");
+    return res.redirect("/login");
+  } catch (err) {
+    console.error("Signup error:", err);
+    return res.render("signup", { message: "Signup failed" });
   }
 });
 
