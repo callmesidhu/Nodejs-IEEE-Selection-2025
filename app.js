@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const bodyParser = require("body-parser");
+const session = require('express-session');
 
 var loginRouter = require('./routes/login');
 var signupRouter = require('./routes/signup');
@@ -30,6 +31,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(
+  session({
+    secret: 'callmesidhu', // Change this to a strong secret
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Set `true` in production with HTTPS
+  })
+);
+
 
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
@@ -37,6 +47,17 @@ app.use('/signup', signupRouter);
 app.use('/admin', adminRouter);
 app.use('/manager', managerRouter);
 app.use('/employee', employeeRouter);
+
+app.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Error logging out');
+    }
+    res.redirect('/login');
+  });
+});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

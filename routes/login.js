@@ -30,7 +30,13 @@ router.post("/", async (req, res) => {
       return res.render("login", { message: "Invalid email or password!" });
     }
 
-    // If login is successful, redirect to dashboard
+    req.session.user = {
+      id: user.id,
+      fullname: user.fullname,
+      email: user.email,
+      type: user.type, // Employee or Admin or Manager
+    };
+
     return res.redirect("/");
   } catch (err) {
     console.error("Login error:", err);
