@@ -16,7 +16,6 @@ var db = require('./configs/dbconnection');
 
 var cors = require('cors');
 
-
 var app = express();
 
 // view engine setup
@@ -40,6 +39,11 @@ app.use(
   })
 );
 
+// ✅ Move this middleware ABOVE routes
+app.use((req, res, next) => {
+  res.locals.session = req.session;
+  next();
+});
 
 app.use('/', indexRouter);
 app.use('/login', loginRouter);
@@ -57,7 +61,6 @@ app.get('/logout', (req, res) => {
     res.redirect('/login');
   });
 });
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

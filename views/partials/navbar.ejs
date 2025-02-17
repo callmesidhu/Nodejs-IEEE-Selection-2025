@@ -1,0 +1,50 @@
+<nav>
+    <ul>
+        <li><a href="/">Home</a></li>
+
+        <% if (session && session.user) { %>
+            <li><a href="#">Welcome, <%= session.user.fullname %></a></li>
+            <li class="right">
+                <a href="/logout" class="btn">Logout</a>
+            </li>
+        <% } else { %>
+            <li class="right">
+                <a href="/login" class="btn">Login</a>
+            </li>
+        <% } %>
+    </ul>
+</nav>
+
+<style>
+    nav {
+        background: #a47676;
+        padding: 10px;
+    }
+    ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    li {
+        display: inline;
+    }
+    .right {
+        margin-left: auto;
+    }
+    a {
+        color: white;
+        text-decoration: none;
+        padding: 8px 15px;
+        font-size: x-large;
+    }
+    .btn {
+        background: rgb(184, 41, 41);
+        border-radius: 5px;
+        transition: 0.3s;
+    }
+    .btn:hover {
+        background: rgb(150, 30, 30);
+    }
+</style>
