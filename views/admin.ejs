@@ -9,63 +9,64 @@
 <body>
     <%- include('partials/navbar') %>
     <div class="admin-dashboard-container">
-        
-
         <h2>Admin Dashboard</h2>
-        <% 
-            // Dummy data with managers, teams, and employees
-            const managers = [
-                {
-                    managerName: "John Doe",
-                    teamName: "Development Team",
-                    employees: [
-                        { name: "Alice Smith", date: "2025-02-16", time: "10:00 AM", subject: "Code Review" },
-                        { name: "Bob Johnson", date: "2025-02-17", time: "11:30 AM", subject: "Feature Discussion" }
-                    ]
-                },
-                {
-                    managerName: "Emma Watson",
-                    teamName: "Marketing Team",
-                    employees: [
-                        { name: "Charlie Brown", date: "2025-02-18", time: "9:45 AM", subject: "Campaign Strategy" },
-                        { name: "Diana Ross", date: "2025-02-19", time: "3:00 PM", subject: "Branding Ideas" }
-                    ]
-                }
-            ];
 
-            // Loop through each manager and their teams
-            managers.forEach((manager) => {
-        %>
-            <div class="manager-section">
-                <h3>Manager: <%= manager.managerName %></h3>
-                <h4>Team: <%= manager.teamName %></h4>
-                <table>
-                    <thead>
+        <!-- Approved Meetings Section -->
+        <h3>Approved by Team Manager</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Subject</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% meetings.forEach(meeting => { %>
+                    <% if (meeting.manager_approve === 1) { %>
                         <tr>
-                            <th>Employee Name</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Subject</th>
-                            <th>Actions</th>
+                            <td><%= meeting.fullname %></td>
+                            <td><%= meeting.date %></td>
+                            <td><%= meeting.time %></td>
+                            <td><%= meeting.meeting_title %></td>
+                            <td>
+                                <button class="approve-btn" onclick="handleAction('<%= meeting.name %>', 'approve')">Approve</button>
+                                <button class="reject-btn" onclick="handleAction('<%= meeting.name %>', 'reject')">Reject</button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <% manager.employees.forEach((employee) => { %>
-                            <tr>
-                                <td><%= employee.name %></td>
-                                <td><%= employee.date %></td>
-                                <td><%= employee.time %></td>
-                                <td><%= employee.subject %></td>
-                                <td>
-                                    <button class="approve-btn" onclick="handleAction('<%= employee.name %>', 'approve')">Approve</button>
-                                    <button class="reject-btn" onclick="handleAction('<%= employee.name %>', 'reject')">Reject</button>
-                                </td>
-                            </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
-            </div>
-        <% }) %>
+                    <% } %>
+                <% }) %>
+            </tbody>
+        </table>
+
+        <!-- Rejected Meetings Section -->
+        <h3>Rejected by Team Manager</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Employee Name</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Subject</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% meetings.forEach(meeting => { %>
+                    <% if (meeting.manager_approve === 0) { %>
+                        <tr>
+                            <td><%= meeting.fullname %></td>
+                            <td><%= meeting.date %></td>
+                            <td><%= meeting.time %></td>
+                            <td><%= meeting.meeting_title %></td>
+                            
+                        </tr>
+                    <% } %>
+                <% }) %>
+            </tbody>
+        </table>
     </div>
 
     <script>

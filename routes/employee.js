@@ -32,10 +32,8 @@ router.post('/meeting', async function (req, res) {
 
     try {
         const result = await db.query(query, [fullname, email, meetingTitle, date, time, description]);
-        console.log("[POST /meeting] Meeting request submitted successfully!", result);
         return res.send(`<script>alert("Meeting request sent successfully!"); window.location.href='/';</script>`);
     } catch (err) {
-        console.error("[POST /meeting] Database Error:", err);
         return res.send(`<script>alert("An error occurred. Please try again later."); window.location.href='/employee';</script>`);
     }
 });
