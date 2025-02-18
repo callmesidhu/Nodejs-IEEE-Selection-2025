@@ -21,3 +21,9 @@ CREATE TABLE users (
     type ENUM('admin', 'manager', 'employee') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+//make admin
+UPDATE users SET type = 'admin' WHERE email = 'email@host.com';
+
+//make manager
+UPDATE users SET type = 'manager' WHERE email = 'email@host.com';
