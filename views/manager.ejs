@@ -9,6 +9,7 @@
 <body>
     
     <%- include('partials/navbar') %>
+
     <div class="meeting-management-container">
         <h2>Meeting Requests</h2>
         
@@ -16,6 +17,7 @@
             <thead>
                 <tr>
                     <th>Employee Name</th>
+                    <th>Email</th>
                     <th>Subject</th>
                     <th>Date</th>
                     <th>Time</th>
@@ -24,56 +26,48 @@
                 </tr>
             </thead>
             <tbody>
-              <% 
-                  // Dummy meeting request data
-                  const meetings = [
-                      {
-                          employeeName: "John Doe",
-                          subject: "Project Discussion",
-                          date: "2025-02-20",
-                          time: "10:00 AM",
-                          description: "Discuss the upcoming project milestones and deadlines."
-                      },
-                      {
-                          employeeName: "Alice Smith",
-                          subject: "Design Review",
-                          date: "2025-02-21",
-                          time: "02:00 PM",
-                          description: "Review the new UI/UX design updates for the website."
-                      },
-                      {
-                          employeeName: "Michael Brown",
-                          subject: "Marketing Strategy",
-                          date: "2025-02-22",
-                          time: "11:30 AM",
-                          description: "Plan and finalize the next quarter marketing strategies."
-                      }
-                  ];
-
-                  // Loop through the dummy data
-                  meetings.forEach((meeting, index) => { 
-              %>
-                  <tr>
-                      <td><%= meeting.employeeName %></td>
-                      <td><%= meeting.subject %></td>
-                      <td><%= meeting.date %></td>
-                      <td><%= meeting.time %></td>
-                      <td><%= meeting.description %></td>
-                      <td>
-                          <button class="approve-btn" onclick="handleAction('<%= meeting.employeeName %>', 'approve')">Approve</button>
-                          <button class="reject-btn" onclick="handleAction('<%= meeting.employeeName %>', 'reject')">Reject</button>
-                      </td>
-                  </tr>
-              <% }) %>
-          </tbody>
+                <% meetings.forEach(meeting => { %>
+                    <tr>
+                        <td><%= meeting.fullname %></td>
+                        <td><%= meeting.email %></td>
+                        <td><%= meeting.meeting_title %></td>
+                        <td><%= meeting.date %></td>
+                        <td><%= meeting.time %></td>
+                        <td><%= meeting.description %></td>
+                        <td>
+                            <button class="approve-btn" onclick="handleAction('<%= meeting.fullname %>', 'approve')">Approve</button>
+                            <button class="reject-btn" onclick="handleAction('<%= meeting.fullname %>', 'reject')">Reject</button>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
         </table>
     </div>
 
     <script>
         function handleAction(employeeName, action) {
             alert(`Meeting request by: ${employeeName} - Action: ${action}`);
-            // You can add AJAX/fetch logic here to send the action to the server
+
+            // Send action to the server via Fetch API
+            fetch('/manager/meeting-action', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ employeeName, action })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(`Meeting request ${action}d successfully.`);
+                    location.reload(); // Refresh page to update UI
+                } else {
+                    alert('Error processing request.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
         }
     </script>
+
 </body>
 </html>
