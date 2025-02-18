@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="/stylesheets/admin.css">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
 </head>
 <body>
     <%- include('partials/navbar') %>
+
     <div class="admin-dashboard-container">
         <h2>Admin Dashboard</h2>
 
@@ -20,6 +22,7 @@
                     <th>Date</th>
                     <th>Time</th>
                     <th>Subject</th>
+                    <th>Admin Approval</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -32,8 +35,17 @@
                             <td><%= meeting.time %></td>
                             <td><%= meeting.meeting_title %></td>
                             <td>
-                                <button class="approve-btn" onclick="handleAction('<%= meeting.name %>', 'approve')">Approve</button>
-                                <button class="reject-btn" onclick="handleAction('<%= meeting.name %>', 'reject')">Reject</button>
+                                <% if (meeting.admin_approve === 1) { %>
+                                    ✅ Approved
+                                <% } else if (meeting.admin_approve === 0) { %>
+                                    ❌ Rejected
+                                <% } else { %>
+                                    ⏳ Pending
+                                <% } %>
+                            </td>
+                            <td>
+                                <button class="approve-btn" onclick="handleAction('<%= meeting.id %>', 1)">Approve</button>
+                                <button class="reject-btn" onclick="handleAction('<%= meeting.id %>', 0)">Reject</button>
                             </td>
                         </tr>
                     <% } %>
@@ -50,7 +62,7 @@
                     <th>Date</th>
                     <th>Time</th>
                     <th>Subject</th>
-                    <th>Actions</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,7 +73,7 @@
                             <td><%= meeting.date %></td>
                             <td><%= meeting.time %></td>
                             <td><%= meeting.meeting_title %></td>
-                            
+                            <td>❌ Rejected</td>
                         </tr>
                     <% } %>
                 <% }) %>
@@ -70,10 +82,20 @@
     </div>
 
     <script>
-        function handleAction(employeeName, action) {
-            alert(`Employee: ${employeeName} - Action: ${action}`);
-            // You can add AJAX/fetch logic here to send the action to the server
+        function handleAction(meetingId, status) {
+            console.log("Meeting ID:", meetingId); // Debugging
+            console.log("Status:", status); // Debugging
+
+            axios.post('/admin/meeting-action', { id: meetingId, status })
+                .then(response => {
+                    alert(response.data.message);
+                    window.location.reload();
+                })
+                .catch(error => {
+                    alert('Error updating approval');
+                });
         }
     </script>
+
 </body>
 </html>

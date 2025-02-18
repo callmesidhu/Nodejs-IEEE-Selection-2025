@@ -26,12 +26,30 @@ router.get("/", async function (req, res, next) {
     res.render("admin", { meetings });
   } catch (err) {
     console.error("Error fetching meetings:", err);
-
-    // Display an alert and redirect to the manager page
     res.send(
       `<script>alert("Error fetching meetings! Please try again."); window.location.href='/manager';</script>`
     );
   }
+});
+
+// Handle admin approval/rejection
+router.post("/meeting-action", async (req, res) => {
+    if (!req.session.user || req.session.user.type !== "admin") {
+        return res.json({ success: false, message: "Unauthorized access" });
+    }
+
+    const { id, status } = req.body;
+    if (!id) return res.json({ success: false, message: "Invalid Meeting ID" });
+
+    try {
+        const sql = "UPDATE meetings SET admin_approve = ? WHERE id = ?";
+        await db.execute(sql, [status, id]);
+
+        return res.json({ success: true, message: "Approval status updated successfully!" });
+    } catch (err) {
+        console.error("Error updating meeting status:", err);
+        return res.json({ success: false, message: "Database error" });
+    }
 });
 
 module.exports = router;
