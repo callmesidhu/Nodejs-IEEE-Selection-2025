@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var db = require('../configs/dbconnection'); 
+var db = require('../configs/dbconnection');
 
 // Employee Dashboard Route
 router.get('/', function (req, res) {
@@ -15,45 +15,29 @@ router.get('/', function (req, res) {
     }
 });
 
-
 // Handle Meeting Request Form Submission
-router.post('/meeting', function (req, res) {
-  if (!req.session.user) {
-      return res.send(`<script>alert("You need to log in first!"); window.location.href='/login';</script>`);
-  }
+router.post('/meeting', async function (req, res) {
+    if (!req.session.user) {
+        return res.send(`<script>alert("You need to log in first!"); window.location.href='/login';</script>`);
+    }
 
-  // Extract data from the form and session
-  const { meetingTitle, date, time, description } = req.body;
-  console.log("Form Data: ", req.body);  // Log form data to check if it's being received correctly
+    const { meetingTitle, date, time, description } = req.body;
+    const { fullname, email } = req.session.user;
 
-  const { fullname, email } = req.session.user;
-  console.log("Session Data: ", req.session.user);  // Log session data to check if it's being received correctly
+    if (!meetingTitle || !date || !time || !description) {
+        return res.send(`<script>alert("All fields are required!"); window.location.href='/employee';</script>`);
+    }
 
-  // SQL query to insert data into the meetings table
-  const query = `
-      INSERT INTO meetings (fullname, email, meeting_title, date, time, description)
-      VALUES (?, ?, ?, ?, ?, ?)
-  `;
+    const query = `INSERT INTO meetings (fullname, email, meeting_title, date, time, description) VALUES (?, ?, ?, ?, ?, ?)`;
 
-  // Execute the query
-  db.query(query, [fullname, email, meetingTitle, date, time, description], function (err, result) {
-      if (err) {
-          console.error('Error inserting meeting request:', err);
-          return res.send(`<script>alert("An error occurred. Please try again later."); window.location.href='/employee';</script>`);
-      }
-
-      console.log('Meeting request submitted successfully!'); // Log successful submission
-
-      // Send success alert and redirect to homepage
-      return res.send(`
-        <script>
-          alert("Meeting request submitted successfully!");
-          window.location.href = '/';
-        </script>
-      `);
-  });
+    try {
+        const result = await db.query(query, [fullname, email, meetingTitle, date, time, description]);
+        console.log("[POST /meeting] Meeting request submitted successfully!", result);
+        return res.send(`<script>alert("Meeting request sent successfully!"); window.location.href='/';</script>`);
+    } catch (err) {
+        console.error("[POST /meeting] Database Error:", err);
+        return res.send(`<script>alert("An error occurred. Please try again later."); window.location.href='/employee';</script>`);
+    }
 });
-
-
 
 module.exports = router;
