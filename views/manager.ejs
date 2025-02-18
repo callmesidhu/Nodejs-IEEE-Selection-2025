@@ -22,6 +22,7 @@
                     <th>Date</th>
                     <th>Time</th>
                     <th>Description</th>
+                    <th>Status</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -35,9 +36,18 @@
                         <td><%= meeting.time %></td>
                         <td><%= meeting.description %></td>
                         <td>
-                            <button class="approve-btn" onclick="handleAction('<%= meeting.fullname %>', 'approve')">Approve</button>
-                            <button class="reject-btn" onclick="handleAction('<%= meeting.fullname %>', 'reject')">Reject</button>
+                            <% if (meeting.manager_approve === 1) { %>
+                                ✅ Approved
+                            <% } else if (meeting.manager_approve === 0) { %>
+                                ❌ Rejected
+                            <% } else { %>
+                                ⏳ Pending
+                            <% } %>
                         </td>
+                        <td>
+                            <button class="approve-btn" onclick="handleAction('<%= meeting.id %>', 'approve')">Approve</button>
+                            <button class="reject-btn" onclick="handleAction('<%= meeting.id %>', 'reject')">Reject</button>
+                                                    </td>
                     </tr>
                 <% }); %>
             </tbody>
@@ -45,22 +55,21 @@
     </div>
 
     <script>
-        function handleAction(employeeName, action) {
-            alert(`Meeting request by: ${employeeName} - Action: ${action}`);
+        function handleAction(meetingId, action) {
+            if (!confirm(`Are you sure you want to ${action} this request?`)) return;
 
-            // Send action to the server via Fetch API
             fetch('/manager/meeting-action', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ employeeName, action })
+                body: JSON.stringify({ meetingId, action })
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     alert(`Meeting request ${action}d successfully.`);
-                    location.reload(); // Refresh page to update UI
+                    location.reload();
                 } else {
                     alert('Error processing request.');
                 }

@@ -24,5 +24,24 @@ router.get("/", async function (req, res, next) {
   }
 });
 
+router.post("/meeting-action", async (req, res) => {
+    if (!req.session.user || req.session.user.type !== "manager") {
+        return res.json({ success: false, message: "Unauthorized access" });
+    }
+
+    const { meetingId, action } = req.body;
+    const approvalStatus = action === "approve" ? 1 : 0;
+
+    try {
+        const sql = "UPDATE meetings SET manager_approve = ? WHERE id = ?";
+        await db.execute(sql, [approvalStatus, meetingId]);
+
+        return res.json({ success: true });
+    } catch (err) {
+        console.error("Error updating meeting status:", err);
+        return res.json({ success: false });
+    }
+});
+
 
 module.exports = router;
